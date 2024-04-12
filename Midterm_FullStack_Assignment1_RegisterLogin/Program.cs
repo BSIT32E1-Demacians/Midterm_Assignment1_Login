@@ -1,7 +1,11 @@
+using Microsoft.EntityFrameworkCore;
+using Midterm_FullStack_Assignment1_RegisterLogin.Models;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddDbContext<AppDbContext>(options => options.UseInMemoryDatabase(databaseName: "InMemoryDb"));
 
 var app = builder.Build();
 
