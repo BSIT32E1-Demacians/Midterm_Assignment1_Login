@@ -35,4 +35,21 @@ public class AccountController : Controller
         }
         return View(user);
     }
+    public IActionResult Login()
+    {
+        return View();
+    }
+
+    [HttpPost]
+    public IActionResult Login(User user)
+    {
+        var loggedInUser = _context.Users.FirstOrDefault(u => u.Username == user.Username && u.Password == user.Password);
+        if (loggedInUser != null)
+        {
+            // You can implement authentication here (e.g., set a cookie)
+            return RedirectToAction("Index", "Home");
+        }
+        ModelState.AddModelError("", "Invalid username or password.");
+        return View(user);
+    }
 }
