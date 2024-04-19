@@ -1,4 +1,4 @@
-﻿namespace Midterm_FullStack_Assignment1_RegisterLogin.Models
+﻿namespace Domain
 {
     public class User // Is The User Object, Contains the User Porperties
     {
