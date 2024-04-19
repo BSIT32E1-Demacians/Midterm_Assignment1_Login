@@ -2,6 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Midterm_FullStack_Assignment1_RegisterLogin.Models;
+using Domain;
+using Service;
+using Repository;
 using System;
 using System.Linq;
 using System.Security.Cryptography;
@@ -10,12 +13,14 @@ using System.Text.RegularExpressions;
 
 public class AccountController : Controller
 {
-    private readonly AppDbContext _context;
+    private readonly Services _userService;
+    private readonly repositories _userRepository;
     private const int MaxLoginAttempts = 3;
 
-    public AccountController(AppDbContext context)
+    public AccountController(repositories repository, Services service)
     {
-        _context = context;
+        _userService = service;
+        _userRepository = repository;
     }
 
     public IActionResult Register()
@@ -28,37 +33,33 @@ public class AccountController : Controller
     {
         if (ModelState.IsValid)
         {
-            // Check if the username already exists
-            var existingUser = _context.Users.FirstOrDefault(u => u.Username == user.Username);
+            var existingUser = _userRepository.GetByUsername(user.Username);
             if (existingUser != null)
             {
                 ModelState.AddModelError("", "Username already exists. Please choose a different one.");
                 return View(user);
             }
 
-            // Validate username length and no spaces
             if (user.Username.Length < 6 || user.Username.Contains(" "))
             {
                 ModelState.AddModelError("", "Username must be at least 6 characters long and cannot contain spaces.");
                 return View(user);
             }
 
-            // Validate password complexity
             if (!IsPasswordValid(user.Password))
             {
                 ModelState.AddModelError("", "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character.");
                 return View(user);
             }
 
-            // Hash the password
             user.Password = HashPassword(user.Password);
 
-            _context.Users.Add(user);
-            _context.SaveChanges();
+            _userService.Create(user); // Assuming CreateUser method exists in your ToDoService
             return RedirectToAction("Login");
         }
         return View(user);
     }
+
 
     public IActionResult Login()
     {
@@ -68,18 +69,15 @@ public class AccountController : Controller
     [HttpPost]
     public IActionResult Login(User user)
     {
-        // Retrieve the user from the database
-        var loggedInUser = _context.Users.FirstOrDefault(u => u.Username == user.Username);
+        var loggedInUser = _userRepository.GetByUsername(user.Username);
 
         if (loggedInUser != null && VerifyPassword(user.Password, loggedInUser.Password))
         {
-            // Successful login
-            HttpContext.Session.SetString("Username", loggedInUser.Username); // Store username in session
-            HttpContext.Session.SetInt32("LoginAttempts", 0); // Reset login attempts
+            HttpContext.Session.SetString("Username", loggedInUser.Username);
+            HttpContext.Session.SetInt32("LoginAttempts", 0);
             return RedirectToAction("Index", "Home");
         }
 
-        // Invalid login attempt
         var remainingAttempts = MaxLoginAttempts - IncrementLoginAttempt();
         if (remainingAttempts > 0)
             ModelState.AddModelError("", $"Invalid username or password. {remainingAttempts} attempts remaining.");

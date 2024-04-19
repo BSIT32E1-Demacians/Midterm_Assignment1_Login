@@ -1,4 +1,7 @@
 using Microsoft.EntityFrameworkCore;
+using Domain;
+using Repository;
+using Service;
 using Midterm_FullStack_Assignment1_RegisterLogin.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -6,6 +9,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<AppDbContext>(options => options.UseInMemoryDatabase(databaseName: "InMemoryDb"));
+builder.Services.AddSingleton<repositories>();
+builder.Services.AddScoped<Services>();
+builder.Services.AddScoped<AccountController>();
 builder.Services.AddSession(options => { options.Cookie.IsEssential = true; });
 
 var app = builder.Build();
