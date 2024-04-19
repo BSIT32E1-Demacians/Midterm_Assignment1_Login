@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace Midterm_FullStack_Assignment1_RegisterLogin.Models
+namespace Domain
 {
     public class AppDbContext : DbContext
     {

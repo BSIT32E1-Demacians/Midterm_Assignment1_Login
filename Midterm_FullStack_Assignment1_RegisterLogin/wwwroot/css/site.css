@@ -19,9 +19,7 @@ html {
 
 body {
     margin-bottom: 60px;
-    background-image: url('xpbackground.webp');
-    background-repeat: no-repeat;
-    background-size: cover;
+    background-color: #EFEFEF;
 }
 
 footer {
