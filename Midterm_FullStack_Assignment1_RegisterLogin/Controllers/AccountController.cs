@@ -14,13 +14,11 @@ using System.Text.RegularExpressions;
 public class AccountController : Controller
 {
     private readonly Services _userService;
-    private readonly repositories _userRepository;
     private const int MaxLoginAttempts = 3;
 
-    public AccountController(repositories repository, Services service)
+    public AccountController(Services service)
     {
         _userService = service;
-        _userRepository = repository;
     }
 
     public IActionResult Register()
@@ -33,7 +31,7 @@ public class AccountController : Controller
     {
         if (ModelState.IsValid)
         {
-            var existingUser = _userRepository.GetByUsername(user.Username);
+            var existingUser = _userService.GetByUsername(user.Username);
             if (existingUser != null)
             {
                 ModelState.AddModelError("", "Username already exists. Please choose a different one.");
@@ -69,7 +67,7 @@ public class AccountController : Controller
     [HttpPost]
     public IActionResult Login(User user)
     {
-        var loggedInUser = _userRepository.GetByUsername(user.Username);
+        var loggedInUser = _userService.GetByUsername(user.Username);
 
         if (loggedInUser != null && VerifyPassword(user.Password, loggedInUser.Password))
         {

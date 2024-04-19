@@ -9,9 +9,13 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<AppDbContext>(options => options.UseInMemoryDatabase(databaseName: "InMemoryDb"));
+
+//IMPORTANT prevents clearing repository when referenced
 builder.Services.AddSingleton<repositories>();
 builder.Services.AddScoped<Services>();
 builder.Services.AddScoped<AccountController>();
+
+//Session for determining login status
 builder.Services.AddSession(options => { options.Cookie.IsEssential = true; });
 
 var app = builder.Build();
