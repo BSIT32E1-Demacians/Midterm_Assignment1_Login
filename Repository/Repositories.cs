@@ -14,5 +14,15 @@ namespace Repository
             return user;
         }
 
+        public Domain.User GetById(int id)
+        {
+            return _todos.FirstOrDefault(t => t.Id == id);
+        }
+
+        public IEnumerable<Domain.User> GetAll()
+        {
+            return _todos.ToList();
+        }
+
     }
 }
