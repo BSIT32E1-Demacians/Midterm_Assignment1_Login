@@ -3,6 +3,7 @@ using Domain;
 using Repository;
 using Service;
 using Midterm_FullStack_Assignment1_RegisterLogin.Models;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +13,7 @@ builder.Services.AddDbContext<AppDbContext>(options => options.UseInMemoryDataba
 
 builder.Services.AddScoped<IUserRepository, repositories>();
 builder.Services.AddScoped<IUserService, Services>();
+builder.Services.AddScoped<AccountController>();
 
 //Session for determining login status
 builder.Services.AddSession(options => { options.Cookie.IsEssential = true; });
