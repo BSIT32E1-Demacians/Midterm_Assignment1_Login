@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Repository
 {
-    public class repositories
+    public class repositories : IUserRepository
     {
         private readonly List<Domain.User> _users = new List<Domain.User>();
         private int _nextId = 1;

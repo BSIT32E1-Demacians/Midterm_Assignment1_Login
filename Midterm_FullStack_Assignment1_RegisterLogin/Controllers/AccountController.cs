@@ -13,10 +13,10 @@ using System.Text.RegularExpressions;
 
 public class AccountController : Controller
 {
-    private readonly Services _userService;
+    private readonly IUserService _userService;
     private const int MaxLoginAttempts = 3;
 
-    public AccountController(Services service)
+    public AccountController(IUserService service)
     {
         _userService = service;
     }
@@ -100,7 +100,7 @@ public class AccountController : Controller
         return passwordRegex.IsMatch(password);
     }
 
-    private string HashPassword(string password)
+    public string HashPassword(string password)
     {
         // Hash the password using PBKDF2 with a random salt
         byte[] salt;
@@ -113,7 +113,7 @@ public class AccountController : Controller
         return Convert.ToBase64String(hashBytes);
     }
 
-    private bool VerifyPassword(string enteredPassword, string hashedPassword)
+    public bool VerifyPassword(string enteredPassword, string hashedPassword)
     {
         // Verify the entered password against the hashed password
         byte[] hashBytes = Convert.FromBase64String(hashedPassword);

@@ -3,6 +3,7 @@ using Domain;
 using Repository;
 using Service;
 using Midterm_FullStack_Assignment1_RegisterLogin.Models;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,10 +11,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<AppDbContext>(options => options.UseInMemoryDatabase(databaseName: "InMemoryDb"));
 
-//IMPORTANT prevents clearing repository when referenced
-builder.Services.AddSingleton<repositories>();
-builder.Services.AddScoped<Services>();
-builder.Services.AddScoped<AccountController>();
+builder.Services.AddSingleton<IUserRepository, repositories>();
+builder.Services.AddScoped<IUserService, Services>();
 
 //Session for determining login status
 builder.Services.AddSession(options => { options.Cookie.IsEssential = true; });
