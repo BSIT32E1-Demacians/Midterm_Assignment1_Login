@@ -13,10 +13,10 @@ using System.Text.RegularExpressions;
 
 public class AccountController : Controller
 {
-    private readonly Services _userService;
+    private readonly IUserService _userService;
     private const int MaxLoginAttempts = 3;
 
-    public AccountController(Services service)
+    public AccountController(IUserService service)
     {
         _userService = service;
     }
