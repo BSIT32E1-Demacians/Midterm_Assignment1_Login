@@ -11,9 +11,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<AppDbContext>(options => options.UseInMemoryDatabase(databaseName: "InMemoryDb"));
 
-builder.Services.AddScoped<IUserRepository, repositories>();
+builder.Services.AddSingleton<IUserRepository, repositories>();
 builder.Services.AddScoped<IUserService, Services>();
-builder.Services.AddScoped<AccountController>();
 
 //Session for determining login status
 builder.Services.AddSession(options => { options.Cookie.IsEssential = true; });
