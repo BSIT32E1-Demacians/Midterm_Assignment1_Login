@@ -5,21 +5,8 @@ namespace Repository
 {
     public class repositories : IUserRepository
     {
-        private readonly List<Domain.User> _users;
+        private readonly List<Domain.User> _users = new List<Domain.User>();
         private int _nextId = 1;
-
-        public repositories()
-        {
-            _users =
-            [
-                new User
-                {
-                    Username = "Admin",
-                    Password = "Password",
-                    Id = 1
-                }
-            ];
-        }
 
         public Domain.User Create(Domain.User user)
         {
