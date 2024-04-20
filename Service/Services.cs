@@ -3,7 +3,7 @@ using Domain;
 
 namespace Service
 {
-    public class Services
+    public class Services : IUserService
     {
         private readonly repositories _repository;
 
